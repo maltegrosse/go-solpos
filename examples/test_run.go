@@ -91,9 +91,16 @@ func main() {
 			diff = 0
 		}
 		_, err = fmt.Fprintln(writer, key, "\t", nrelMap[key], "\t", resultMap[key], "\t", diff)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 	}
 	err = writer.Flush()
-
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	sp.SetFunction(0)
 	sp.SetFunction(solpos.LAmass | solpos.LDoy) // call only the airmass function
 	sp.SetPress(1013.0)                         // set your own pressure

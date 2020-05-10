@@ -1,5 +1,9 @@
 Go-Solar Position and Intensity (SOLPOS)
 =======================================
+[![Go Report Card](https://goreportcard.com/badge/github.com/maltegrosse/go-solpos)](https://goreportcard.com/report/github.com/maltegrosse/go-solpos)
+[![GoDoc](https://godoc.org/github.com/maltegrosse/go-solpos?status.svg)](https://pkg.go.dev/github.com/maltegrosse/go-solpos)
+![Go](https://github.com/maltegrosse/go-solpos/workflows/Go/badge.svg) 
+
 NREL's Solar Position and Intensity (SOLPOS 2.0) C function (adopted in go lang) calculates the apparent solar position and intensity (theoretical maximum solar energy) based on date, time, and location on Earth for the years *1950–2050*.
 ## Installation
 
