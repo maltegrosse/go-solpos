@@ -1,12 +1,5 @@
 package solpos
 
-import (
-	"fmt"
-	"github.com/pkg/errors"
-	"math"
-	"time"
-)
-
 /*
 *    Contains:
 *        S_solpos     (computes solar position and intensity
@@ -71,6 +64,12 @@ import (
 *                               (changed sign). Error is small (max 0.015 deg
 *                               in calculation of declination angle)
 */
+import (
+	"fmt"
+	"github.com/pkg/errors"
+	"math"
+	"time"
+)
 
 /* Solpos interface: Each comment begins with a 1-column letter code:
    I:  INPUT variable
@@ -253,6 +252,7 @@ type Solpos interface {
 	SetZenref(zenref float64)
 }
 
+// NewSolpos creates new instance of Solpos
 func NewSolpos(dt time.Time, latitude float64, longitude float64, optionalParameters map[string]interface{}) (Solpos, error) {
 	var sp solpos
 	sp.setTrigdata(trigdata{1.0, 1.0, 1.0, -999.0, 1.0})
@@ -793,7 +793,7 @@ func (sp *solpos) Calculate() error {
 
 	if sp.Function.HasFlag(LZenetr) {
 		/* etr at non-refracted zenith angle */
-		sp.zen_no_ref()
+		sp.zenNoRef()
 	}
 
 	if sp.Function.HasFlag(LSsha) {
@@ -906,7 +906,7 @@ type trigdata struct /* used to pass calculated values locally */
  * Temporary global variables used only in this file:
  *
  *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-var month_days = [2][13]int{{0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334}, {0, 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335}}
+var monthDays = [2][13]int{{0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334}, {0, 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335}}
 
 /* cumulative number of days prior to beginning of month */
 const degrad float64 = 57.295779513 /* converts from radians to degrees */
@@ -920,7 +920,7 @@ func (sp *solpos) validate() error {
 	/* No absurd dates, please. */
 	if sp.Function.HasFlag(LGeom) {
 
-		if (sp.Year < 1950) || (sp.Year > 2050) { /* limits of algoritm */
+		if (sp.Year < 1950) || (sp.Year > 2050) { /* limits of algorithm */
 
 			return errors.New("Please fix the year: [1950-2050]")
 		}
@@ -1020,7 +1020,7 @@ func (sp *solpos) validate() error {
  *            daynum
  *----------------------------------------------------------------------------*/
 func (sp *solpos) dom2doy() {
-	sp.Daynum = sp.Day + month_days[0][sp.Month]
+	sp.Daynum = sp.Day + monthDays[0][sp.Month]
 
 	/* (adjust for leap year) */
 	if sp.Year%4 == 0 && (sp.Year%100 != 0 || sp.Year%400 == 0) && sp.Month > 2 {
@@ -1059,13 +1059,13 @@ func (sp *solpos) doy2dom() {
 	/* Find the month */
 	imon = 12
 
-	for sp.Daynum <= month_days[leap][imon] {
+	for sp.Daynum <= monthDays[leap][imon] {
 		imon--
 	}
 
 	/* Set the month and day of month */
 	sp.Month = imon
-	sp.Day = sp.Daynum - month_days[leap][imon]
+	sp.Day = sp.Daynum - monthDays[leap][imon]
 
 }
 
@@ -1239,7 +1239,7 @@ func (sp *solpos) geometry() {
  *       Iqbal, M.  1983.  An Introduction to Solar Radiation.
  *            Academic Press, NY., page 15
  *----------------------------------------------------------------------------*/
-func (sp *solpos) zen_no_ref() {
+func (sp *solpos) zenNoRef() {
 	var cz float64 /* cosine of the solar zenith angle */
 
 	sp.localtrig()

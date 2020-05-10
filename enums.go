@@ -1,11 +1,19 @@
 package solpos
 
+// SPFunctions defines the Solpos functionality as bitmask
 type SPFunctions uint32
 
+// HasFlag returns a boolean if the flag is already included
 func (f SPFunctions) HasFlag(flag SPFunctions) bool { return f&flag != 0 }
-func (f *SPFunctions) AddFlag(flag SPFunctions)     { *f |= flag }
-func (f *SPFunctions) ClearFlag(flag SPFunctions)   { *f &= ^flag }
-func (f *SPFunctions) ToggleFlag(flag SPFunctions)  { *f ^= flag }
+
+// AddFlag adds a flag
+func (f *SPFunctions) AddFlag(flag SPFunctions) { *f |= flag }
+
+// ClearFlag removes a flag
+func (f *SPFunctions) ClearFlag(flag SPFunctions) { *f &= ^flag }
+
+// ToggleFlag toggles a flag.
+func (f *SPFunctions) ToggleFlag(flag SPFunctions) { *f ^= flag }
 
 //go:generate stringer -type=SPFunctions
 const (

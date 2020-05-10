@@ -71,10 +71,21 @@ func main() {
 
 	writer := tabwriter.NewWriter(os.Stdout, 0, 8, 1, '\t', tabwriter.AlignRight)
 	_, err = fmt.Fprintln(writer, "- \tNREL\tSOLPOS\tDiff")
-	for key, _ := range nrelMap {
-		a, _ := strconv.ParseFloat(fmt.Sprint(nrelMap[key]), 64)
-
-		b, _ := strconv.ParseFloat(fmt.Sprint(resultMap[key]), 64)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for key := range nrelMap {
+		a, err := strconv.ParseFloat(fmt.Sprint(nrelMap[key]), 64)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		b, err := strconv.ParseFloat(fmt.Sprint(resultMap[key]), 64)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 		diff := a - b
 		if diff < 0.000001 {
 			diff = 0
